@@ -11,6 +11,7 @@ $.prototype.init = function(selector) {
         this[0] = selector;
         this.length = 1;
         return this;
+        
     }
 
     Object.assign(this, document.querySelectorAll(selector));
