@@ -25,7 +25,47 @@ $.prototype.animateOverTime = function (dur, cb, fin) {
     return _animateOverTime;
 };
 
+$.prototype.techFadeIn = function (dur, display, fin) {
+    for (let i = 0; i < this.length; i++) {
+        this[i].style.display = display || 'block';
+
+        const _fadeIn = (complection) => {
+            this[i].style.opacity = complection;
+        };
+
+        const ani = this.animateOverTime(dur, _fadeIn, fin);
+        requestAnimationFrame(ani);
+    }
+};
+
+$.prototype.techFadeOut = function (dur, fin) {
+    for (let i = 0; i < this.length; i++) {
+
+        const _fadeOut = (complection) => {
+            this[i].style.opacity = 1 - complection;
+            if (complection === 1) {
+                this[i].style.display = "none";
+            }
+        };
+
+        const ani = this.animateOverTime(dur, _fadeOut, fin);
+        requestAnimationFrame(ani);
+    }
+};
+
 $.prototype.fadeIn = function(dur, display, fin) {
+    this.techFadeIn(dur, display, fin);
+
+    return this;
+};
+
+$.prototype.fadeOut = function(dur, fin) {
+    this.techFadeOut(dur, fin);
+
+    return this;
+};
+
+/* $.prototype.fadeIn = function(dur, display, fin) {
     for (let i = 0; i < this.length; i++) {
         this[i].style.display = display || 'block';
 
@@ -38,9 +78,10 @@ $.prototype.fadeIn = function(dur, display, fin) {
     }
 
     return this;
-};
+}; */
 
-$.prototype.fadeOut = function(dur, fin) {
+
+/* $.prototype.fadeOut = function(dur, fin) {
     for (let i = 0; i < this.length; i++) {
 
         const _fadeOut = (complection) => {
@@ -52,6 +93,36 @@ $.prototype.fadeOut = function(dur, fin) {
 
         const ani = this.animateOverTime(dur, _fadeOut, fin);
         requestAnimationFrame(ani);
+    }
+
+    return this;
+}; */
+
+$.prototype.fadeToggle = function(dur, display, fin) {
+    for (let i = 0; i < this.length; i++) {
+        if (window.getComputedStyle(this[i]).display === 'none') {
+            /* this[i].style.display = display || 'block';
+
+            const _fadeIn = (complection) => {
+                this[i].style.opacity = complection;
+            };
+
+            const ani = this.animateOverTime(dur, _fadeIn, fin);
+            requestAnimationFrame(ani); */
+            this.techFadeIn(dur, display, fin);
+        } else {
+            /* const _fadeOut = (complection) => {
+                this[i].style.opacity = 1 - complection;
+                if (complection === 1) {
+                    this[i].style.display = "none";
+                }
+            };
+    
+            const ani = this.animateOverTime(dur, _fadeOut, fin);
+            requestAnimationFrame(ani); */
+            this.techFadeOut(dur, fin);
+        }
+
     }
 
     return this;

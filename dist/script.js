@@ -462,7 +462,7 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.animateOverTime = functi
   return _animateOverTime;
 };
 
-_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeIn = function (dur, display, fin) {
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.techFadeIn = function (dur, display, fin) {
   for (let i = 0; i < this.length; i++) {
     this[i].style.display = display || 'block';
 
@@ -473,11 +473,9 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeIn = function (dur, 
     const ani = this.animateOverTime(dur, _fadeIn, fin);
     requestAnimationFrame(ani);
   }
-
-  return this;
 };
 
-_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeOut = function (dur, fin) {
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.techFadeOut = function (dur, fin) {
   for (let i = 0; i < this.length; i++) {
     const _fadeOut = complection => {
       this[i].style.opacity = 1 - complection;
@@ -489,6 +487,72 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeOut = function (dur,
 
     const ani = this.animateOverTime(dur, _fadeOut, fin);
     requestAnimationFrame(ani);
+  }
+};
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeIn = function (dur, display, fin) {
+  this.techFadeIn(dur, display, fin);
+  return this;
+};
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeOut = function (dur, fin) {
+  this.techFadeOut(dur, fin);
+  return this;
+};
+/* $.prototype.fadeIn = function(dur, display, fin) {
+    for (let i = 0; i < this.length; i++) {
+        this[i].style.display = display || 'block';
+
+        const _fadeIn = (complection) => {
+            this[i].style.opacity = complection;
+        };
+
+        const ani = this.animateOverTime(dur, _fadeIn, fin);
+        requestAnimationFrame(ani);
+    }
+
+    return this;
+}; */
+
+/* $.prototype.fadeOut = function(dur, fin) {
+    for (let i = 0; i < this.length; i++) {
+
+        const _fadeOut = (complection) => {
+            this[i].style.opacity = 1 - complection;
+            if (complection === 1) {
+                this[i].style.display = "none";
+            }
+        };
+
+        const ani = this.animateOverTime(dur, _fadeOut, fin);
+        requestAnimationFrame(ani);
+    }
+
+    return this;
+}; */
+
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeToggle = function (dur, display, fin) {
+  for (let i = 0; i < this.length; i++) {
+    if (window.getComputedStyle(this[i]).display === 'none') {
+      /* this[i].style.display = display || 'block';
+       const _fadeIn = (complection) => {
+          this[i].style.opacity = complection;
+      };
+       const ani = this.animateOverTime(dur, _fadeIn, fin);
+      requestAnimationFrame(ani); */
+      this.techFadeIn(dur, display, fin);
+    } else {
+      /* const _fadeOut = (complection) => {
+          this[i].style.opacity = 1 - complection;
+          if (complection === 1) {
+              this[i].style.display = "none";
+          }
+      };
+           const ani = this.animateOverTime(dur, _fadeOut, fin);
+      requestAnimationFrame(ani); */
+      this.techFadeOut(dur, fin);
+    }
   }
 
   return this;
@@ -557,8 +621,16 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.click = function (handle
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_lib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lib/lib */ "./src/js/lib/lib.js");
 
-$('button').addAttr('value');
-console.log($('.findme').fadeOut(1800));
+$('#first').on('click', () => {
+  $('div').eq(1).fadeToggle(800);
+});
+$('[data-count="second"]').on('click', () => {
+  $('div').eq(2).fadeToggle(800);
+});
+$('button').eq(2).on('click', () => {
+  $('.w-500').fadeToggle(800);
+});
+$('.btn-access').fadeIn(800);
 
 /***/ })
 
