@@ -26,3 +26,28 @@ $('.wrap').html(
     `
 );
 $('.dropdown-toggle').dropdown();
+
+$('#trigger').click(() => $('#trigger').createModal({
+    text: {
+        title: 'Modal title',
+        body: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga mollitia nemo placeat optio itaque vero hic, repudiandae maxime quidem necessitatibus, vel odio, quos eius odit ex eligendi recusandae vitae voluptatem'
+    },
+    btns: {
+        count: 2,
+        settings: [
+            [
+                'close',
+                ['btn-danger', 'mr-10'],
+                true
+            ],
+            [
+                'Save changes',
+                ['btn-success'],
+                false,
+                () => {
+                    alert('Данные сохранены');
+                }
+            ]
+        ]
+    }
+}));
