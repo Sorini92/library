@@ -58,7 +58,7 @@ $.prototype.find = function(selector) {
 
     this.length = numberOfItems;
 
-    const objLength = Object.keys(this.length);
+    const objLength = Object.keys(this).length;
     for (; numberOfItems < objLength; numberOfItems++) {
         delete this[numberOfItems];
     }
@@ -97,7 +97,7 @@ $.prototype.siblings = function() {
         const arr = copyObj[i].parentNode.children;
 
         for (let j = 0; j < arr.length; j++) {
-            if (copyObj[i] == arr[j]) {
+            if (copyObj[i] === arr[j]) {
                 continue;
             }
 
@@ -110,7 +110,7 @@ $.prototype.siblings = function() {
 
     this.length = numberOfItems;
 
-    const objLength = Object.keys(this.length);
+    const objLength = Object.keys(this).length;
     for (; numberOfItems < objLength; numberOfItems++) {
         delete this[numberOfItems];
     }

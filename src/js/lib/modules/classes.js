@@ -8,7 +8,7 @@ $.prototype.addClass = function (...classNames) {
         this[i].classList.add(...classNames);
     }
 
-    return this.length;
+    return this;
 };
 
 $.prototype.removeClass = function (...classNames) {
@@ -19,7 +19,7 @@ $.prototype.removeClass = function (...classNames) {
         this[i].classList.remove(...classNames);
     }
 
-    return this.length;
+    return this;
 };
 
 $.prototype.toggleClass = function (classNames) {
@@ -30,5 +30,5 @@ $.prototype.toggleClass = function (classNames) {
         this[i].classList.toggle(classNames);
     }
 
-    return this.length;
+    return this;
 };
