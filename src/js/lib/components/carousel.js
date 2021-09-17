@@ -69,3 +69,15 @@ $.prototype.carousel = function() {
 };
 
 $('.carousel').carousel();
+
+$.prototype.createCarousel = function(carousel) {
+    for (let i = 0; i < this.length; i++) {
+        const carouselBlock = $(carousel);
+        let clides = $('.carousel-item');
+        const dotsContainer = document.createElement('ol');
+        const dot = document.createElement('li');
+
+        dot.append(dotsContainer);
+        dotsContainer.prepend(carouselBlock);
+    }
+};

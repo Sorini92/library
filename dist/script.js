@@ -196,6 +196,17 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.carousel = function () {
 
 Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.carousel').carousel();
 
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.createCarousel = function (carousel) {
+  for (let i = 0; i < this.length; i++) {
+    const carouselBlock = Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(carousel);
+    let clides = Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.carousel-item');
+    const dotsContainer = document.createElement('ol');
+    const dot = document.createElement('li');
+    dot.append(dotsContainer);
+    dotsContainer.prepend(carouselBlock);
+  }
+};
+
 /***/ }),
 
 /***/ "./src/js/lib/components/dropdown.js":
@@ -964,7 +975,10 @@ $('#trigger2').click(() => $('#trigger2').createModal({
     }]]
   }
 }));
-$().get('https://jsonplaceholder.typicode.com/todos/1').then(res => console.log(res));
+/* $().get('https://jsonplaceholder.typicode.com/todos/1')
+    .then(res => console.log(res)); */
+
+$('#example').createCarousel('.carousel');
 
 /***/ })
 

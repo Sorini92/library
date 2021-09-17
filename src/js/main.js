@@ -77,5 +77,7 @@ $('#trigger2').click(() => $('#trigger2').createModal({
     }
 }));
 
-$().get('https://jsonplaceholder.typicode.com/todos/1')
-    .then(res => console.log(res));
+/* $().get('https://jsonplaceholder.typicode.com/todos/1')
+    .then(res => console.log(res)); */
+
+$('#example').createCarousel('.carousel');
