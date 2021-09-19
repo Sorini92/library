@@ -1,11 +1,13 @@
 import $ from '../core';
 
-$.prototype.carousel = function() {
+$.prototype.carousel = function(autoPlay = false) {
     for (let i = 0; i < this.length; i++) {
         const width = window.getComputedStyle(this[i].querySelector('.carousel-inner')).width;
         const slides = this[i].querySelectorAll('.carousel-item');
         const slidesField = this[i].querySelector('.carousel-slides');
         const dots = this[i].querySelectorAll('.carousel-indicators li');
+        const prev = $(this[i].querySelector('[data-slide="prev"]'));
+        const next = $(this[i].querySelector('[data-slide="next"]'));
 
         slidesField.style.width = 100 * slides.length + '%';
         slides.forEach(slide => {
@@ -15,8 +17,7 @@ $.prototype.carousel = function() {
         let offset = 0;
         let slideIndex = 0;
 
-        $(this[i].querySelector('[data-slide="next"]')).click((e) => {
-            e.preventDefault();
+        function nextSlide () {
             if (offset == (+width.replace(/\D/g, '') * (slides.length - 1))) {
                 offset = 0;
             } else {
@@ -33,9 +34,14 @@ $.prototype.carousel = function() {
             }
             dots.forEach(dot => dot.classList.remove('active'));
             dots[slideIndex].classList.add('active');
+        }
+
+        next.click((e) => {
+            e.preventDefault();
+            nextSlide();
         });
 
-        $(this[i].querySelector('[data-slide="prev"]')).click((e) => {
+        prev.click((e) => {
             e.preventDefault();
             if (offset == 0) {
                 offset = +width.replace(/\D/g, '') * (slides.length - 1)
@@ -65,19 +71,83 @@ $.prototype.carousel = function() {
             dots.forEach(dot => dot.classList.remove('active'));
             dots[slideIndex].classList.add('active');
         });
+
+        if (autoPlay) {
+            let paused = setInterval(() => nextSlide(), 5000);
+
+            slides.forEach(slide => {
+                slide.addEventListener('mouseenter', () => {
+                    clearInterval(paused);
+                });
+                slide.addEventListener('mouseleave', () => {
+                    paused = setInterval(() => nextSlide(), 5000);
+                });
+            });
+
+            prev.on('mouseenter', () => {
+                clearInterval(paused);
+            });
+            prev.on('mouseleave', () => {
+                paused = setInterval(() => nextSlide(), 5000);
+            });
+
+            next.on('mouseenter', () => {
+                clearInterval(paused);
+            });
+            next.on('mouseleave', () => {
+                paused = setInterval(() => nextSlide(), 5000);
+            });
+        }
     }
 };
 
-$('.carousel').carousel();
+//$('.carousel').carousel();
 
-$.prototype.createCarousel = function(carousel) {
+$.prototype.createCarousel = function({carousel, needDots = true}) {
     for (let i = 0; i < this.length; i++) {
-        const carouselBlock = $(carousel);
-        let clides = $('.carousel-item');
-        const dotsContainer = document.createElement('ol');
-        const dot = document.createElement('li');
+        const carouselBlock = this[i].querySelector(carousel),
+              dotsContainer = document.createElement('ol'),
+              next = document.createElement('a'),
+              prev = document.createElement('a'),
+              spanPrev = document.createElement('span'),
+              spanNext = document.createElement('span');
+        let slides = this[i].querySelectorAll('.carousel-item'),
+            dot;
 
-        dot.append(dotsContainer);
-        dotsContainer.prepend(carouselBlock);
+        if (needDots) {
+            dotsContainer.classList.add('carousel-indicators');
+        
+            for (let j = 0; j < slides.length; j++) {
+                dot = document.createElement('li');
+
+                if (j == 0) {
+                    dot.classList.add('active');
+                }
+                
+                dot.setAttribute('data-slide-to', `${j}`);
+                dotsContainer.append(dot);
+            }
+        
+            carouselBlock.parentNode.prepend(dotsContainer);
+        }
+
+        prev.setAttribute('data-slide', 'prev');
+        prev.setAttribute('href', '#');
+        prev.classList.add('carousel-prev');
+
+        spanPrev.innerHTML = '&lt;';
+        spanPrev.classList.add('carousel-prev-icon');
+        prev.append(spanPrev);
+
+        next.setAttribute('data-slide', 'next');
+        next.setAttribute('href', '#');
+        next.classList.add('carousel-next');
+
+        spanNext.innerHTML = '&gt;';
+        spanNext.classList.add('carousel-next-icon');
+        next.append(spanNext);
+
+        carouselBlock.parentNode.append(prev);
+        carouselBlock.parentNode.append(next);
     }
 };

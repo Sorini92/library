@@ -129,21 +129,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core */ "./src/js/lib/core.js");
 
 
-_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.carousel = function () {
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.carousel = function (autoPlay = false) {
   for (let i = 0; i < this.length; i++) {
     const width = window.getComputedStyle(this[i].querySelector('.carousel-inner')).width;
     const slides = this[i].querySelectorAll('.carousel-item');
     const slidesField = this[i].querySelector('.carousel-slides');
     const dots = this[i].querySelectorAll('.carousel-indicators li');
+    const prev = Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i].querySelector('[data-slide="prev"]'));
+    const next = Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i].querySelector('[data-slide="next"]'));
     slidesField.style.width = 100 * slides.length + '%';
     slides.forEach(slide => {
       slide.style.width = width;
     });
     let offset = 0;
     let slideIndex = 0;
-    Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i].querySelector('[data-slide="next"]')).click(e => {
-      e.preventDefault();
 
+    function nextSlide() {
       if (offset == +width.replace(/\D/g, '') * (slides.length - 1)) {
         offset = 0;
       } else {
@@ -161,8 +162,13 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.carousel = function () {
 
       dots.forEach(dot => dot.classList.remove('active'));
       dots[slideIndex].classList.add('active');
+    }
+
+    next.click(e => {
+      e.preventDefault();
+      nextSlide();
     });
-    Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(this[i].querySelector('[data-slide="prev"]')).click(e => {
+    prev.click(e => {
       e.preventDefault();
 
       if (offset == 0) {
@@ -191,19 +197,79 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.carousel = function () {
       dots.forEach(dot => dot.classList.remove('active'));
       dots[slideIndex].classList.add('active');
     });
+
+    if (autoPlay) {
+      let paused = setInterval(() => nextSlide(), 5000);
+      slides.forEach(slide => {
+        slide.addEventListener('mouseenter', () => {
+          clearInterval(paused);
+        });
+        slide.addEventListener('mouseleave', () => {
+          paused = setInterval(() => nextSlide(), 5000);
+        });
+      });
+      prev.on('mouseenter', () => {
+        clearInterval(paused);
+      });
+      prev.on('mouseleave', () => {
+        paused = setInterval(() => nextSlide(), 5000);
+      });
+      next.on('mouseenter', () => {
+        clearInterval(paused);
+      });
+      next.on('mouseleave', () => {
+        paused = setInterval(() => nextSlide(), 5000);
+      });
+    }
   }
-};
+}; //$('.carousel').carousel();
 
-Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.carousel').carousel();
 
-_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.createCarousel = function (carousel) {
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.createCarousel = function ({
+  carousel,
+  needDots = true
+}) {
   for (let i = 0; i < this.length; i++) {
-    const carouselBlock = Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])(carousel);
-    let clides = Object(_core__WEBPACK_IMPORTED_MODULE_0__["default"])('.carousel-item');
-    const dotsContainer = document.createElement('ol');
-    const dot = document.createElement('li');
-    dot.append(dotsContainer);
-    dotsContainer.prepend(carouselBlock);
+    const carouselBlock = this[i].querySelector(carousel),
+          dotsContainer = document.createElement('ol'),
+          next = document.createElement('a'),
+          prev = document.createElement('a'),
+          spanPrev = document.createElement('span'),
+          spanNext = document.createElement('span');
+    let slides = this[i].querySelectorAll('.carousel-item'),
+        dot;
+
+    if (needDots) {
+      dotsContainer.classList.add('carousel-indicators');
+
+      for (let j = 0; j < slides.length; j++) {
+        dot = document.createElement('li');
+
+        if (j == 0) {
+          dot.classList.add('active');
+        }
+
+        dot.setAttribute('data-slide-to', `${j}`);
+        dotsContainer.append(dot);
+      }
+
+      carouselBlock.parentNode.prepend(dotsContainer);
+    }
+
+    prev.setAttribute('data-slide', 'prev');
+    prev.setAttribute('href', '#');
+    prev.classList.add('carousel-prev');
+    spanPrev.innerHTML = '&lt;';
+    spanPrev.classList.add('carousel-prev-icon');
+    prev.append(spanPrev);
+    next.setAttribute('data-slide', 'next');
+    next.setAttribute('href', '#');
+    next.classList.add('carousel-next');
+    spanNext.innerHTML = '&gt;';
+    spanNext.classList.add('carousel-next-icon');
+    next.append(spanNext);
+    carouselBlock.parentNode.append(prev);
+    carouselBlock.parentNode.append(next);
   }
 };
 
@@ -978,7 +1044,11 @@ $('#trigger2').click(() => $('#trigger2').createModal({
 /* $().get('https://jsonplaceholder.typicode.com/todos/1')
     .then(res => console.log(res)); */
 
-$('#example').createCarousel('.carousel');
+$('.carousel').createCarousel({
+  carousel: '.carousel-inner',
+  needDots: true
+});
+$('.carousel').carousel(true);
 
 /***/ })
 

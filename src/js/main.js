@@ -80,4 +80,9 @@ $('#trigger2').click(() => $('#trigger2').createModal({
 /* $().get('https://jsonplaceholder.typicode.com/todos/1')
     .then(res => console.log(res)); */
 
-$('#example').createCarousel('.carousel');
+$('.carousel').createCarousel({
+    carousel: '.carousel-inner', 
+    needDots: true
+});
+
+$('.carousel').carousel(true);
