@@ -17,7 +17,7 @@ $.prototype.carousel = function(autoPlay = false) {
         let offset = 0;
         let slideIndex = 0;
 
-        function nextSlide () {
+        const nextSlide = function () {
             if (offset == (+width.replace(/\D/g, '') * (slides.length - 1))) {
                 offset = 0;
             } else {
@@ -101,8 +101,6 @@ $.prototype.carousel = function(autoPlay = false) {
     }
 };
 
-//$('.carousel').carousel();
-
 $.prototype.createCarousel = function({carousel, needDots = true}) {
     for (let i = 0; i < this.length; i++) {
         const carouselBlock = this[i].querySelector(carousel),
@@ -151,3 +149,10 @@ $.prototype.createCarousel = function({carousel, needDots = true}) {
         carouselBlock.parentNode.append(next);
     }
 };
+
+$('.carousel').createCarousel({
+    carousel: '.carousel-inner', 
+    needDots: true
+});
+
+$('.carousel').carousel(true);
